@@ -165,18 +165,27 @@ From the Microsoft documentation, the impersonation levels are defined as follow
 - **SecurityDelegation**  
     The server process can impersonate the client's security context on remote systems, allowing for a higher level of trust and flexibility in distributed environments.
 
+## Logon Session
+
+As I wrote earlier, an access token serves as an identifier for the privileges and permissions granted to its holder. When a user or entity authenticates with a system, it establishes a session known as a logon session. Each logon session is uniquely identified by a 64-bit Locally Unique Identifier (LUID). This logon authentication ID acts as a bridge, linking the access token to the corresponding logon session, ensuring that the security context is properly maintained.
+
+When Windows Vista launched in 2007, Microsoft introduced User Account Control (UAC) and Integrity Levels as part of a broader effort to improve Windows security. Along with these changes came the concept of the split token. This mechanism allows users in the Administrators group to separate their non-elevated tasks from those requiring administrative privileges—such as SeDebugPrivilege.
+
+It’s important to clarify that the term “split token” doesn’t literally mean a user has two tokens at all times. Instead, it refers to a filtered token, which is a type of restricted token. Restricted tokens have actually been around since Windows 2000, originally intended for sandboxing scenarios (e.g., isolating browser content). However, they were rarely used in practice.
+
+Prior to Vista, it was common for users especially to run with full administrative rights by default. The idea of using a standard user account was rarely enforced or adopted. The introduction of UAC in Vista aimed to correct this, forcing least privilege usage by default, even for administrative users.
 
 
 
 
+![Split Session](/assets/images/token/split-session.png)
 
 
 
-
-
-
-## Logon & Session 
 # SID, Groups & Privileges
+
+
+
 ## Sandboxing
 # Windows API 
 
