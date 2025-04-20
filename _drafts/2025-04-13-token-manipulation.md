@@ -167,19 +167,17 @@ From the Microsoft documentation, the impersonation levels are defined as follow
 
 ## Logon Session
 
-As I wrote earlier, an access token serves as an identifier for the privileges and permissions granted to its holder. When a user or entity authenticates with a system, it establishes a session known as a logon session. Each logon session is uniquely identified by a 64-bit Locally Unique Identifier (LUID). This logon authentication ID acts as a bridge, linking the access token to the corresponding logon session, ensuring that the security context is properly maintained.
+As I wrote earlier, an access token serves as an identifier for the privileges and permissions granted to its holder. When a user or entity authenticates with a system, it establishes a session known as a **logon session**. Each logon session is uniquely identified by a **64-bit Locally Unique Identifier (LUID)**. This logon authentication ID acts as a bridge, linking the access token to the corresponding logon session, ensuring that the security context is properly maintained.
 
-When Windows Vista launched in 2007, Microsoft introduced User Account Control (UAC) and Integrity Levels as part of a broader effort to improve Windows security. Along with these changes came the concept of the split token. This mechanism allows users in the Administrators group to separate their non-elevated tasks from those requiring administrative privileges—such as SeDebugPrivilege.
+When Windows Vista launched in 2007, Microsoft introduced **User Account Control (UAC)** and **Integrity Levels** as part of a broader effort to improve Windows security. Along with these changes came the concept of the **split token**. This mechanism allows users in the Administrators group to separate their non-elevated tasks from those requiring administrative privileges—such as `SeDebugPrivilege`.
 
-It’s important to clarify that the term “split token” doesn’t literally mean a user has two tokens at all times. Instead, it refers to a filtered token, which is a type of restricted token. Restricted tokens have actually been around since Windows 2000, originally intended for sandboxing scenarios (e.g., isolating browser content). However, they were rarely used in practice.
+It’s important to clarify that the term **“split token”** doesn’t literally mean a user has two tokens at all times. Instead, it refers to a **filtered token**, which is a type of **restricted token**. Restricted tokens have actually been around since Windows 2000, originally intended for sandboxing scenarios (e.g., isolating browser content). However, they were rarely used in practice.
 
-Prior to Vista, it was common for users especially to run with full administrative rights by default. The idea of using a standard user account was rarely enforced or adopted. The introduction of UAC in Vista aimed to correct this, forcing least privilege usage by default, even for administrative users.
+Prior to Vista, it was common for users, especially administrators, to run with full administrative rights by default. The idea of using a standard user account was rarely enforced or adopted. The introduction of **UAC** in Vista aimed to correct this, forcing **least privilege usage** by default, even for administrative users.
 
-
-
+You can see the split token in action below. By utilizing the `logonSessions` tool, we observe my account currently having two active logon sessions. One session has significantly fewer processes, while the other contains a larger number of processes. This demonstrates the elevated usage of my token in action.
 
 ![Split Session](/assets/images/token/split-session.png)
-
 
 
 # SID, Groups & Privileges
