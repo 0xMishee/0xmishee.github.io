@@ -169,7 +169,7 @@ From the Microsoft documentation, the impersonation levels are defined as follow
 
 As I wrote earlier, an access token serves as an identifier for the privileges and permissions granted to its holder. When a user or entity authenticates with a system, it establishes a session known as a **logon session**. Each logon session is uniquely identified by a **64-bit Locally Unique Identifier (LUID)**. This logon authentication ID acts as a bridge, linking the access token to the corresponding logon session, ensuring that the security context is properly maintained.
 
-When Windows Vista launched in 2007, Microsoft introduced **User Account Control (UAC)** and **Integrity Levels** as part of a broader effort to improve Windows security. Along with these changes came the concept of the **split token**. This mechanism allows users in the Administrators group to separate their non-elevated tasks from those requiring administrative privileges—such as `SeDebugPrivilege`.
+When Windows Vista launched in 2007, Microsoft introduced **User Account Control (UAC)** and **Integrity Levels** as part of a broader effort to improve Windows security. Along with these changes came the concept of the **split token**. This mechanism allows users in the Administrators group to separate their non-elevated tasks from those requiring administrative privileges, such as `SeDebugPrivilege`.
 
 It’s important to clarify that the term **“split token”** doesn’t literally mean a user has two tokens at all times. Instead, it refers to a **filtered token**, which is a type of **restricted token**. Restricted tokens have actually been around since Windows 2000, originally intended for sandboxing scenarios (e.g., isolating browser content). However, they were rarely used in practice.
 
@@ -182,9 +182,58 @@ You can see the split token in action below. By utilizing the `logonSessions` to
 
 # SID, Groups & Privileges
 
+You may already know that a SID (Security Identifier) is a unique value used to identify a user, but it actually represents more than just users. Technically, a SID is an identifier for a trustee. According to Microsoft, a trustee can be a user account, group, or logon session to which an Access Control Entry (ACE) applies.
 
+These logon sessions don’t necessarily have to belong to a human user. They can also represent Windows services that log on to the local computer using built-in service accounts, such as LocalSystem, LocalService, or NetworkService.
+
+Each of these accounts receives a security token during logon, just like any user would, and this token includes the SID, privileges, and group memberships that define its access rights within the system.
+
+The access control function utlize the TRUSTEE structure, like most things in Windows it all boils down to structures. If you were to supply a name to the function that create an ACE from an TRUSTEE struct, then it would simply allocate a SID buffer and look up the SID by using the provided name.
+
+```c
+typedef struct _TRUSTEE_A {
+  struct _TRUSTEE_A          *pMultipleTrustee;
+  MULTIPLE_TRUSTEE_OPERATION MultipleTrusteeOperation;
+  TRUSTEE_FORM               TrusteeForm;
+  TRUSTEE_TYPE               TrusteeType;
+  union {
+    LPSTR              ptstrName;
+    SID                *pSid;
+    OBJECTS_AND_SID    *pObjectsAndSid;
+    OBJECTS_AND_NAME_A *pObjectsAndName;
+  };
+  LPCH                       ptstrName;
+} TRUSTEE_A, *PTRUSTEE_A, TRUSTEEA, *PTRUSTEEA;
+```
+
+### Key Fields in the TRUSTEE Structure
+
+There are a couple of important fields in the `TRUSTEE` structure that need to be understood:
+
+- **TrusteeForm**  
+    This field is a pointer that specifies the type of data the trustee represents. Common values include:
+    - `TRUSTEE_IS_SID`: Indicates the trustee is identified by a Security Identifier (SID).
+    - `TRUSTEE_IS_NAME`: Indicates the trustee is identified by a name.
+
+- **TrusteeType**  
+    This enumeration defines the type of trustee being referenced. Possible values include:
+    - `TRUSTEE_IS_USER`: The trustee is a user account.
+    - `TRUSTEE_IS_GROUP`: The trustee is a group.
+    - `TRUSTEE_IS_DOMAIN`: The trustee is a domain.
+    - `TRUSTEE_IS_ALIAS`: The trustee is an alias.
+    - `TRUSTEE_IS_WELL_KNOWN_GROUP`: The trustee is a well-known group.
+    - `TRUSTEE_IS_DELETED`: The trustee has been deleted.
+    - `TRUSTEE_IS_INVALID`: The trustee is invalid.
+    - `TRUSTEE_IS_COMPUTER`: The trustee is a computer account.
+
+
+
+    
 
 ## Sandboxing
+
+
+
 # Windows API 
 
 CreateProcessWithTokenW
@@ -192,6 +241,11 @@ CreateProcessAsUserA
 ImpersonateLoggedOnUser 
 SetThreadToken 
 CreateProcessWithLogonW 
+BuildTrusteeWithSid
+BuildTrusteeWithName
+BuildTrusteeWithObjectsAndSid 
+BuildTrusteeWithObjectsAndName
+GetTrusteeForm, GetTrusteeName, and GetTrusteeType
 
 # Where to find them
 ## Cobolt Strike & Sliver & Covenant
