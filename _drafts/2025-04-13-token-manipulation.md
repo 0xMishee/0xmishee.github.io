@@ -181,6 +181,7 @@ You can see the split token in action below. By utilizing the `logonSessions` to
 
 
 # SID, Groups & Privileges
+## SID
 
 You may already know that a SID (Security Identifier) is a unique value used to identify a user, but it actually represents more than just users. Technically, a SID is an identifier for a trustee. According to Microsoft, a trustee can be a user account, group, or logon session to which an Access Control Entry (ACE) applies.
 
@@ -226,9 +227,35 @@ There are a couple of important fields in the `TRUSTEE` structure that need to b
     - `TRUSTEE_IS_INVALID`: The trustee is invalid.
     - `TRUSTEE_IS_COMPUTER`: The trustee is a computer account.
 
+## Groups
+
+Groups are essentially collections of users represented by a single SID. For the Security Reference Monitor, it doesn't matter whether a SID represents an individual user or a group; a SID is treated equally regardless of its type. This means that instead of assigning permissions to individual SIDs, you can group multiple users under a single SID. This approach simplifies the management of Access Control Lists (ACLs), making them easier to handle and maintain.
+
+With that said, there are a few key attributes that the Security Reference Monitor (SRM) considers when evaluating access permissions: **Enabled**, **EnabledByDefault**, and **Mandatory**. 
+
+- **EnabledByDefault**: These are groups or privileges that are automatically enabled when the token is created. They are active unless explicitly disabled.
+- **Enabled**: This indicates whether a group is currently active. While you can toggle the enabled state for certain groups, they must first be marked as EnabledByDefault to be activated.
+- **Mandatory**: Unlike the other attributes, mandatory groups cannot be toggled on or off. They are always enabled.
+
+These attributes ensure that the SRM can effectively enforce security policies by determining which groups and privileges are applicable during access checks.
+
+![Groups](/assets/images/token/groups.png)
+
+## Privileges
+
+Privileges function as exceptions to the standard access control process, allowing certain actions to bypass traditional access checks entirely. Think of them as special rights that grant the ability to perform tasks without adhering to the usual resource-based access control mechanisms.
+
+Similar to groups, privileges can have different states: **Enabled**, **Disabled**, and **EnabledByDefault**. However, unlike groups, privileges are identified by **Locally Unique Identifiers (LUIDs)**, which we discussed earlier. When a privilege name is provided, the system resolves it to the corresponding LUID, much like how it resolves names to SIDs.
+
+Privileges are not tied to specific resources but instead grant overarching capabilities, making them a powerful tool within the security model.
+
+![EnabledByDefaultPriv](/assets/images/token/EnabledByDefaultPriv.png)
+
+The difference between using a elevated powershell and a none-elevated one.
+
+![Privileges](/assets/images/token/privileges.png)
 
 
-    
 
 ## Sandboxing
 
