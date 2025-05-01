@@ -255,9 +255,9 @@ The difference between using a elevated powershell and a none-elevated one.
 
 ![Privileges](/assets/images/token/privileges.png)
 
-
-
 ## Sandboxing
+
+
 
 
 
@@ -275,6 +275,9 @@ BuildTrusteeWithObjectsAndName
 GetTrusteeForm, GetTrusteeName, and GetTrusteeType
 
 # Where to find them
+
+
+
 ## Cobolt Strike & Sliver & Covenant
 ## PlugX
 ## QuakLoader
