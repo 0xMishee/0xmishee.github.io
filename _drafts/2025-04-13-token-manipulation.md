@@ -257,22 +257,13 @@ The difference between using a elevated powershell and a none-elevated one.
 
 ## Sandboxing
 
+The concept of restricting what a process can and cannot do predates the introduction of UAC and modern access tokens. The first implementation of sandboxing appeared in Windows 2000 through the use of restricted tokens, as mentioned earlier. These tokens were commonly used to enforce either write restrictions or read restrictions. While it was technically possible to apply both restrictions simultaneously, doing so could render the process so limited that it would be unable to perform essential tasks, such as spawning a new process, making it impractical.
+
+Another early approach to sandboxing was employed by Internet Explorer, which utilized integrity levels to create a secure environment. By running the browser at a low integrity level, it effectively operated within a sandbox, isolating it from higher-privileged processes and resources.
+
+A more modern approach involves the use of AppContainers and, by extension, lowbox tokens. These tokens are specifically designed to enforce the principle of least privilege by limiting the actions and interactions of both applications and users. AppContainers combine the identities of the user and the application to create a unique security context for each pairing, ensuring a higher level of isolation and security.
 
 
-
-
-# Windows API 
-
-CreateProcessWithTokenW
-CreateProcessAsUserA 
-ImpersonateLoggedOnUser 
-SetThreadToken 
-CreateProcessWithLogonW 
-BuildTrusteeWithSid
-BuildTrusteeWithName
-BuildTrusteeWithObjectsAndSid 
-BuildTrusteeWithObjectsAndName
-GetTrusteeForm, GetTrusteeName, and GetTrusteeType
 
 # Where to find them
 
