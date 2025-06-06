@@ -1,4 +1,5 @@
 ---
+layout: post
 title: "PE Adventures"
 date: 2023-06-23 15:30:00 +0200  
 categories: [SysInternals]
