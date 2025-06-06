@@ -220,6 +220,6 @@ So what I did to find all the values was to open up x64dbg set a breakpoint at t
 
 **Key: 5 4 3 1 6 2**
 
-![-](/assets/images/binarybomb/28.webp)
+![](/assets/images/binarybomb/28.webp)
 
 
