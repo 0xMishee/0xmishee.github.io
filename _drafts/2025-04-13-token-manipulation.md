@@ -263,12 +263,3 @@ Another early approach to sandboxing was employed by Internet Explorer, which ut
 
 A more modern approach involves the use of AppContainers and, by extension, lowbox tokens. These tokens are specifically designed to enforce the principle of least privilege by limiting the actions and interactions of both applications and users. AppContainers combine the identities of the user and the application to create a unique security context for each pairing, ensuring a higher level of isolation and security.
 
-# Where to find them
-
-
-
-## PlugX
-## QuakLoader
-
-# Add it your malware
-
