@@ -31,8 +31,7 @@ An access token contains:
 
 The access token is created whenever a user logs in. This can be done through either interactive , remoteinteractive, network, service or batch, they will all create an access token for that user. 
 
-There's a bit of a special case when it comes to users like SYSTEM, Local Service and Network Service. Since they're users and are clearly running processes the question remains on how they're created; which the simply answer is. 
-
+There's a bit of a special case when it comes to users like SYSTEM, Local Service and Network Service. Since they're users and are clearly running processes the question remains on how they're created; which the simply answer is that they're created by the operating system through the use of service control manager (SCM) and the windows kernel. 
 
 ## The Why
 
@@ -40,8 +39,7 @@ The purpose of an access token is to represent an identity for the Security Refe
 
 ## The Where
 
-Processes and threads are generally where they are used, 
-
+Everywhere, all at once. You will find them anywhere where something needs to happen (vaguely said), since tokens act like an identifier for the privileges that the called entity is allowed to use. Meaning that processes, threads, RPCs and COM/DCOM all utilizes them.
 
 # Types
 ## Primary & Impersonation
@@ -169,11 +167,11 @@ From the Microsoft documentation, the impersonation levels are defined as follow
 
 As I wrote earlier, an access token serves as an identifier for the privileges and permissions granted to its holder. When a user or entity authenticates with a system, it establishes a session known as a **logon session**. Each logon session is uniquely identified by a **64-bit Locally Unique Identifier (LUID)**. This logon authentication ID acts as a bridge, linking the access token to the corresponding logon session, ensuring that the security context is properly maintained.
 
-When Windows Vista launched in 2007, Microsoft introduced **User Account Control (UAC)** and **Integrity Levels** as part of a broader effort to improve Windows security. Along with these changes came the concept of the **split token**. This mechanism allows users in the Administrators group to separate their non-elevated tasks from those requiring administrative privileges, such as `SeDebugPrivilege`.
+When Windows Vista launched in 2007, Microsoft introduced User Account Control (UAC) and Integrity Levels as part of a broader effort to improve Windows security. Along with these changes came the concept of the split token. This mechanism allows users in the Administrators group to separate their non-elevated tasks from those requiring administrative privileges, such as `SeDebugPrivilege`.
 
-It’s important to clarify that the term **“split token”** doesn’t literally mean a user has two tokens at all times. Instead, it refers to a **filtered token**, which is a type of **restricted token**. Restricted tokens have actually been around since Windows 2000, originally intended for sandboxing scenarios (e.g., isolating browser content). However, they were rarely used in practice.
+It’s important to clarify that the term “split token” doesn’t literally mean a user has two tokens at all times. Instead, it refers to a filtered token, which is a type of restricted token. Restricted tokens have actually been around since Windows 2000, originally intended for sandboxing scenarios (e.g., isolating browser content). However, they were rarely used in practice.
 
-Prior to Vista, it was common for users, especially administrators, to run with full administrative rights by default. The idea of using a standard user account was rarely enforced or adopted. The introduction of **UAC** in Vista aimed to correct this, forcing **least privilege usage** by default, even for administrative users.
+Prior to Vista, it was common for users, especially administrators, to run with full administrative rights by default. The idea of using a standard user account was rarely enforced or adopted. The introduction of UAC in Vista aimed to correct this, forcing least privilege usage by default, even for administrative users.
 
 You can see the split token in action below. By utilizing the `logonSessions` tool, we observe my account currently having two active logon sessions. One session has significantly fewer processes, while the other contains a larger number of processes. This demonstrates the elevated usage of my token in action.
 
@@ -231,7 +229,7 @@ There are a couple of important fields in the `TRUSTEE` structure that need to b
 
 Groups are essentially collections of users represented by a single SID. For the Security Reference Monitor, it doesn't matter whether a SID represents an individual user or a group; a SID is treated equally regardless of its type. This means that instead of assigning permissions to individual SIDs, you can group multiple users under a single SID. This approach simplifies the management of Access Control Lists (ACLs), making them easier to handle and maintain.
 
-With that said, there are a few key attributes that the Security Reference Monitor (SRM) considers when evaluating access permissions: **Enabled**, **EnabledByDefault**, and **Mandatory**. 
+With that said, there are a few key attributes that the Security Reference Monitor (SRM) considers when evaluating access permissions: Enabled, EnabledByDefault, and Mandatory. 
 
 - **EnabledByDefault**: These are groups or privileges that are automatically enabled when the token is created. They are active unless explicitly disabled.
 - **Enabled**: This indicates whether a group is currently active. While you can toggle the enabled state for certain groups, they must first be marked as EnabledByDefault to be activated.
@@ -245,7 +243,7 @@ These attributes ensure that the SRM can effectively enforce security policies b
 
 Privileges function as exceptions to the standard access control process, allowing certain actions to bypass traditional access checks entirely. Think of them as special rights that grant the ability to perform tasks without adhering to the usual resource-based access control mechanisms.
 
-Similar to groups, privileges can have different states: **Enabled**, **Disabled**, and **EnabledByDefault**. However, unlike groups, privileges are identified by **Locally Unique Identifiers (LUIDs)**, which we discussed earlier. When a privilege name is provided, the system resolves it to the corresponding LUID, much like how it resolves names to SIDs.
+Similar to groups, privileges can have different states: Enabled, Disabled, and EnabledByDefault. However, unlike groups, privileges are identified by **Locally Unique Identifiers (LUIDs)**, which we discussed earlier. When a privilege name is provided, the system resolves it to the corresponding LUID, much like how it resolves names to SIDs.
 
 Privileges are not tied to specific resources but instead grant overarching capabilities, making them a powerful tool within the security model.
 
