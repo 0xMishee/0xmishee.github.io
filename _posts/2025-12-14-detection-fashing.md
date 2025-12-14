@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Detection isn't a fashion statement"
+title: "Bridging Industrial Hazard Analysis and Detection Engineering"
 date: 25-12-14 12:00:00 +0200  
 categories: [OT, DE]
 tags: [safety, DE]
