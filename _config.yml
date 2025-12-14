@@ -16,7 +16,7 @@ timezone: Europe/Stockholm
 
 title: Martin Jakobsson # the main title
 
-tagline: Analyst and general absurdist # it will display as the subtitle
+tagline: Security Engineer, Analyst and general absurdist # it will display as the subtitle
 
 description: >- # used by seo meta and the atom feed
   A minimal, responsive and feature-rich Jekyll theme for technical writing.
