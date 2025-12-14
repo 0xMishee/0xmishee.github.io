@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Detection isn't a fashion statement"
-date: 25-12-14 12:05:00 +0200  
+date: 25-12-14 12:00:00 +0200  
 categories: [OT, DE]
 tags: [safety, DE]
 description: "How Hazard Analysis maps onto Detection Engineering workflows"
